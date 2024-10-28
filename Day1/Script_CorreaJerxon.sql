@@ -1,0 +1,55 @@
+CREATE database FiltroBSDD;
+
+Use FiltroBSDD;
+
+CREATE TABLE Libros (ISBN INT auto_increment NOT NULL, EDITORIAL VARCHAR(30) NOT
+NULL,TITULOS VARCHAR(30) NOT NULL, FECHA_DE_PUBLICACION VARCHAR(30) NOT NULL,
+CATEGORIA VARCHAR(30) NOT NULL,
+PRIMARY KEY(ISBN)
+);
+
+CREATE TABLE Autores (IDAUTORES INT auto_increment NOT NULL, NOMBRE VARCHAR(30) NOT
+NULL, APELLIDO VARCHAR(30) NOT NULL, NACIONALIDAD VARCHAR(30) NOT NULL,
+FECHA_DE_NACIMIENTO VARCHAR(30) NOT NULL,
+PRIMARY KEY(IDAUTORES)
+);
+
+CREATE TABLE Clientes(idClientes INT auto_increment NOT NULL, DIRECCION VARCHAR(30)
+NOT NULL, TELEFONO INT NOT NULL, CORREO_ELECTRONICO VARCHAR(30) NOT NULL, NOMBRE
+VARCHAR(30) NOT NULL,
+PRIMARY KEY(IdClientes)
+);
+
+CREATE TABLE Pedidos(IDPEDIDOS INT auto_increment NOT NULL, CANTIDAD INT NOT NULL,
+LIBROS VARCHAR(30) NOT NULL, FECHA_DE_COMPRA VARCHAR(30) NOT NULL, ESTADO
+VARCHAR(30) NOT NULL, Libros_ISBN INT NOT NULL, Clientes_idClientes INT
+NOT NULL,
+PRIMARY KEY(IDPEDIDOS),
+constraint Clientes_idClientes foreign key (Clientes_idClientes)
+	references Clientes (IdClientes),
+constraint Libros_ISBN foreign key (Libros_ISBN)
+	references Libros (ISBN)
+);
+
+CREATE TABLE Transacciones(IDTRANSACCION INT auto_increment NOT NULL,
+FECHA_DE_TRANSACCION VARCHAR(30) NOT NULL, MONTO_TOTAL INT NOT NULL, METODO_DE_PAGO
+VARCHAR(30) NOT NULL, Pedidos_IDPEDIDOS INT NOT NULL,
+PRIMARY KEY(IDTRANSACCION),
+constraint Pedidos_IDPEDIDOS foreign key (Pedidos_IDPEDIDOS)
+	references Pedidos (IDPEDIDOS)
+);
+
+CREATE TABLE Stock (idStock INT auto_increment NOT NULL, NombreLibro VARCHAR(30) NOT
+NULL, Precio INT NOT NULL, Libros_ID INT NOT NULL,
+PRIMARY KEY(idStock),
+constraint Libros_ID foreign key (Libros_ID)
+	references Libros (ISBN)
+);
+
+CREATE TABLE Libro_has_Actores(IDLIBROS INT NOT NULL, Autores_idAutores INT NOT
+NULL,
+constraint IDLIBROS foreign key (IDLIBROS)
+	references Libros (ISBN),
+constraint Autores_idAutores foreign key (Autores_idAutores)
+	references Autores (IDAUTORES)
+);
