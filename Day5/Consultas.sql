@@ -43,5 +43,5 @@ select grado.nombre, sum(creditos), tipo from asignatura right join grado on asi
 select anyo_inicio, count(id_curso_escolar) as cantidad_alumnos from alumno_se_matricula_asignatura inner join curso_escolar on id_curso_escolar = curso_escolar.id group by id_curso_escolar;
 
 -- Devuelve un listado con el número de asignaturas que imparte cada profesor. El listado debe tener en cuenta aquellos profesores que no imparten ninguna asignatura. 
--- El resultado mostrará cinco columnas: id, nombre, primer apellido, segundo apellido y número de asignaturas. El resultado estará ordenado de mayor a menor por el número de asignaturas.
+-- El resultado mostrará cinco columnas: id, nombre, primer apellido, segundo apellido y número de asignaturas. El resultado estará ordenado de mayor a menor por el número de asignaturas.	
 select profesor.id, profesor.nombre, profesor.apellido1, profesor.apellido2, count(asignatura.id_profesor) from asignatura right join profesor on asignatura.id_profesor = profesor.id group by 1,2,3,4 order by 5 desc;
