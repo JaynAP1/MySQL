@@ -1,0 +1,1 @@
+-- Lista el primer apellido de todos los empleados.
