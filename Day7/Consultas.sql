@@ -209,4 +209,4 @@ select departamento.nombre, count(empleado.nombre) from empleado right join depa
 select departamento.nombre, count(empleado.nombre) from empleado right join departamento on empleado.id_departamento = departamento.id group by 1;
 
 -- Calcula el número de empleados que trabajan en cada unos de los departamentos que tienen un presupuesto mayor a 200000 euros.
-select departamento.nombre, count(empleado.nombre) from empleado right join departamento on empleado.id_departamento = departamento.id where presupuesto > 200000 group by 1 ;
+select departamento.nombre, count(empleado.nombre) from empleado right join departamento on empleado.id_departamento = departamento.id where presupuesto > 200000 group by 1;
