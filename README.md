@@ -1,4 +1,78 @@
 # MySQL
+| Column 1 | Column 2 |
+|----------|----------|
+| Day 1    | My firs Script on Sql   |
+| Day 2    |   --- |
+| Day 3    | Jardinera data base, consults and inserts   |
+| Day 4    | How to use Joins, left and right        |
+| Day 5    | Universidad data base, consults and inser with joins      |
+| Day 6    | Universidad data base, complex problems and socialization       |
+| Day 7    | Functions and 63 consults optimized for function and joins        |
+
+## Day 1
+
+### Fisic Model
+![alt text](Day1.png)
+
+### Script SQL
+```sql
+CREATE database FiltroBSDD;
+
+Use FiltroBSDD;
+
+CREATE TABLE Libros (ISBN INT auto_increment NOT NULL, EDITORIAL VARCHAR(30) NOT
+NULL,TITULOS VARCHAR(30) NOT NULL, FECHA_DE_PUBLICACION VARCHAR(30) NOT NULL,
+CATEGORIA VARCHAR(30) NOT NULL,
+PRIMARY KEY(ISBN)
+);
+
+CREATE TABLE Autores (IDAUTORES INT auto_increment NOT NULL, NOMBRE VARCHAR(30) NOT
+NULL, APELLIDO VARCHAR(30) NOT NULL, NACIONALIDAD VARCHAR(30) NOT NULL,
+FECHA_DE_NACIMIENTO VARCHAR(30) NOT NULL,
+PRIMARY KEY(IDAUTORES)
+);
+
+CREATE TABLE Clientes(idClientes INT auto_increment NOT NULL, DIRECCION VARCHAR(30)
+NOT NULL, TELEFONO INT NOT NULL, CORREO_ELECTRONICO VARCHAR(30) NOT NULL, NOMBRE
+VARCHAR(30) NOT NULL,
+PRIMARY KEY(IdClientes)
+);
+
+CREATE TABLE Pedidos(IDPEDIDOS INT auto_increment NOT NULL, CANTIDAD INT NOT NULL,
+LIBROS VARCHAR(30) NOT NULL, FECHA_DE_COMPRA VARCHAR(30) NOT NULL, ESTADO
+VARCHAR(30) NOT NULL, Libros_ISBN INT NOT NULL, Clientes_idClientes INT
+NOT NULL,
+PRIMARY KEY(IDPEDIDOS),
+constraint Clientes_idClientes foreign key (Clientes_idClientes)
+	references Clientes (IdClientes),
+constraint Libros_ISBN foreign key (Libros_ISBN)
+	references Libros (ISBN)
+);
+
+CREATE TABLE Transacciones(IDTRANSACCION INT auto_increment NOT NULL,
+FECHA_DE_TRANSACCION VARCHAR(30) NOT NULL, MONTO_TOTAL INT NOT NULL, METODO_DE_PAGO
+VARCHAR(30) NOT NULL, Pedidos_IDPEDIDOS INT NOT NULL,
+PRIMARY KEY(IDTRANSACCION),
+constraint Pedidos_IDPEDIDOS foreign key (Pedidos_IDPEDIDOS)
+	references Pedidos (IDPEDIDOS)
+);
+
+CREATE TABLE Stock (idStock INT auto_increment NOT NULL, NombreLibro VARCHAR(30) NOT
+NULL, Precio INT NOT NULL, Libros_ID INT NOT NULL,
+PRIMARY KEY(idStock),
+constraint Libros_ID foreign key (Libros_ID)
+	references Libros (ISBN)
+);
+
+CREATE TABLE Libro_has_Actores(IDLIBROS INT NOT NULL, Autores_idAutores INT NOT
+NULL,
+constraint IDLIBROS foreign key (IDLIBROS)
+	references Libros (ISBN),
+constraint Autores_idAutores foreign key (Autores_idAutores)
+	references Autores (IDAUTORES)
+);
+```
+
 ## Day 7
 In this MySQL project we use the different ways to solve the following problems
 
@@ -8,7 +82,7 @@ Have 63 consults for a simple database:
 #### Fisic Model
 ![alt text](image.png)
 
-#### Code Sql
+#### Script SQL
 ```sql
 -- Lista el primer apellido de todos los empleados.
 select apellido1 from empleado;
