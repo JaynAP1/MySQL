@@ -30,10 +30,4 @@ select departamento.nombre, profesor.nombre,profesor.apellido1, profesor.apellid
 
 -- Devuelve un listado con todos los departamentos que tienen alguna asignatura que no se haya impartido en ningún curso escolar.
 -- El resultado debe mostrar el nombre del departamento y el nombre de la asignatura que no se haya impartido nunca.
-select  departamento.nombre, asignatura.nombre from departamento left join profesor on departamento.id = profesor.id_departamento
-inner join asignatura on profesor.id = asignatura.id_profesor left join alumno_se_matricula_asignatura asma on asignatura.id = asma.id_asignatura
-left join curso_escolar on asma.id_curso_escolar != curso_escolar.id;
-
-select distinct asignatura.nombre, departamento.nombre from asignatura inner join alumno_se_matricula_asignatura asma on asignatura.id = asma.id_asignatura
-inner join curso_escolar on asma.id_curso_escolar = curso_escolar.id left join profesor on asignatura.id_profesor = profesor.id
-left join departamento on profesor.id_departamento = departamento.id;
+select distinct departamento.nombre from departamento,profesor,asignatura,alumno_se_matricula_asignatura, curso_escolar where not departamento.id = profesor.id_departamento and asignatura.id_profesor = profesor.id;
