@@ -150,7 +150,7 @@ begin
 end //
 DELIMITER ;
 
-select Alquiler ("2024-11-01", "2024-11-08", "SEDAN")
+select Alquiler ("2024-11-01", "2025-11-30", "Pickup");
 
 -- -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -187,14 +187,15 @@ select @vehiculos as Vehiculos_Rojos;
 
 -- 4). Mostrar la cantidad de vehiculos de un color que el cliente elija.
 Delimiter //
-create procedure ColorEleccion(in colorE varchar(30),out Cantidad int)
+create procedure ColorEleccion(in colorE varchar(30),out Cantidad int, out Nombre varchar(30))
 begin
 	select count(color) into Cantidad from vehiculos where color = ColorE;
+    select Referencia into Nombre from vehiculos where color = ColorE;
 end //
 Delimiter ;
 
-call ColorEleccion("Verde",@Cantidad_color);
-select @Cantidad_color as Cantidad;
+call ColorEleccion("Azul",@Cantidad_color, @Nombre);
+select @Cantidad_color as Cantidad, @Nombre;
 
 -- 5). Cerrar una sucursal.
 Delimiter //
@@ -241,3 +242,60 @@ end
 // Delimiter ;
 
 call CambiarNombre("Ramon",1)
+
+-- 8). Editar el porcentaje de un descuento.
+Delimiter //
+Create procedure EditarDescuento(in Id_in int, in Nuevo_descuento int)
+begin
+	update descuentos set Porcentaje_Descuento = Nuevo_descuento where id = Id_in;
+end
+// Delimiter ;
+
+call EditarDescuento(1,50);
+
+-- 9). Crear un procedimiento que me calcule un posible alquiler de un vehiculo.
+Delimiter //
+Create procedure PosibleAlquiler(in Fecha_Salida varchar(30), in Fecha_llegada varchar(30), in TipoVehiculo varchar(30), out Posible_pago int)
+begin
+	Declare Descuento1 int;
+    Declare Descuento2 int;
+    Declare Descuento3 int;
+    Declare valor_dia int;
+    Declare Descuento int;
+    
+    set valor_dia = 50;
+    set Descuento1 = (select distinct porcentaje_Descuento from descuentos where Tipo_Vehiculo = "SEDAN");
+    set Descuento2 = (select distinct porcentaje_Descuento from descuentos where Tipo_Vehiculo = "Pickup");
+    set Descuento3 = (select distinct porcentaje_Descuento from descuentos where Tipo_Vehiculo = "Compacto");
+    
+    if TipoVehiculo = "SEDAN" then set Descuento = Descuento1;
+    elseif TipoVehiculo = "Pickup" then set Descuento = Descuento2;
+    elseif TipoVehiculo = "Compacto" then set Descuento = Descuento3;
+    end if;
+
+	select (datediff(Fecha_llegada,Fecha_salida)*valor_dia-(datediff(Fecha_llegada,Fecha_salida)*Valor_dia)*Descuento/100) into Posible_pago;
+    
+end
+// Delimiter ;
+
+call PosibleAlquiler ("2024-11-01", "2025-11-30", "Pickup", @Posible);
+select @Posible as Valor_Pagar;
+
+-- 10). Valor adicional a pagar si tiene dias de retraso.
+Delimiter //
+Create procedure ValorAdicional (in Dias_Retraso int, out Adicional int)
+begin
+	Declare Valor int;
+    Declare Valor_dia int;
+    set Valor_dia = 50;
+    
+    set Valor = (select (Valor_dia+Valor_dia*8/100));
+    
+    select ((@Posible + Dias_Retraso) + Valor) into Adicional;
+    
+end
+// Delimiter :
+
+call ValorAdicional(0, @Resultado);
+
+select @Resultado as Valor_Con_Retraso;
