@@ -151,3 +151,93 @@ end //
 DELIMITER ;
 
 select Alquiler ("2024-11-01", "2024-11-08", "SEDAN")
+
+-- -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- 1). Inserte nuevos descuentos.
+Delimiter //
+Create procedure InsertDescuento( in Porcentaje int, in Inicio varchar(30), in Final varchar(30), in tipo varchar (30))
+begin
+ insert into descuentos(Porcentaje_Descuento, Inicio_Descuento, Final_Descuento, Tipo_Vehiculo) values (Porcentaje, Inicio, Final, tipo);
+end
+// Delimiter ;
+
+call InsertDescuento(10,"2024-1-01","2024-6-01","Pesado") 
+
+-- 2). Despedir un empleado.
+Delimiter //
+Create procedure Despedir(in id_in int)
+begin
+	delete from empleados where id=id_in;
+end
+// Delimiter ;
+
+call Despedir (5)
+
+-- 3). Mostrar la cantidad de vehiculos de color rojo.
+Delimiter //
+create procedure VehiculosR(out Cantidad int)
+begin
+	select count(color) into Cantidad from vehiculos where color = "Rojo";
+end //
+Delimiter ;
+
+call VehiculosR(@vehiculos);
+select @vehiculos as Vehiculos_Rojos;
+
+-- 4). Mostrar la cantidad de vehiculos de un color que el cliente elija.
+Delimiter //
+create procedure ColorEleccion(in colorE varchar(30),out Cantidad int)
+begin
+	select count(color) into Cantidad from vehiculos where color = ColorE;
+end //
+Delimiter ;
+
+call ColorEleccion("Verde",@Cantidad_color);
+select @Cantidad_color as Cantidad;
+
+-- 5). Cerrar una sucursal.
+Delimiter //
+Create procedure CerrarSucursal(in id_in int)
+begin
+	delete from gestion_sucursales where id=id_in;
+end
+// Delimiter ;
+
+call CerrarSucursal(5);
+
+-- 6). Cambiar la disponibilidad de un vehiculo a eleccion.
+Delimiter //
+Create procedure Disponibilidad(in id_in int, in Disponibilidad_in tinyint)
+begin
+	declare Dispo tinyint;
+
+	select Disponibilidad into Dispo from gestion_vehicular where id = id_in;
+    if Dispo = Disponibilidad_in then
+    signal	sqlstate '45000' set message_text = "El estado que intentas cambiar es el mismo que estas entregando.";
+    end if;
+    
+    update gestion_vehicular set disponibilidad = Disponibilidad_in where id = id_in;
+    
+    commit;	
+end
+// Delimiter ;
+
+call Disponibilidad(1,0);
+
+-- 7). Cambiar el nombre de un cliente.
+Delimiter //
+create procedure CambiarNombre (in NuevoNombre varchar(50),in Id_in int)
+begin
+	Declare Name_N varchar(50);
+    
+    select Nombre into Name_N from clientes where id = id_in;
+    if Name_N = NuevoNombre then
+    signal sqlstate '45000' set message_text = "El nombre que ingresaste es el mismo.";
+    end if;
+    
+    update clientes set Nombre = NuevoNombre where id = id_in;
+end
+// Delimiter ;
+
+call CambiarNombre("Ramon",1)
